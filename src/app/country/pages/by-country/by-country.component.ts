@@ -18,8 +18,8 @@ export class ByCountryComponent {
   term: string = '';
   Error: boolean = false;
   countries: Country[] = [];
-
   suggestedCountries: Country[] = [];
+  showSuggestions:boolean=false;
 
   search(term: string) {
     this.Error = false;
@@ -35,10 +35,21 @@ export class ByCountryComponent {
         this.countries = [];
       }
     );
+    this.showSuggestions=false;
   }
 
   suggestions(term: string) {
     this.Error = false;
-    this.countryService.findCountry(term).subscribe((countries) => this.suggestedCountries=countries.splice(0,5));
+    this.term = term;
+    this.countryService.findCountry(term).subscribe(
+      (countries) => (this.suggestedCountries = countries.splice(0, 5)),
+      (err) => (this.suggestedCountries = [])
+    );
+    this.showSuggestions=true;
+  }
+
+  searchSuggestion(term:string){
+   this.search(term);
+ 
   }
 }

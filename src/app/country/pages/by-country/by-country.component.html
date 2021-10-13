@@ -4,29 +4,43 @@
 <div class="row">
   <div class="col">
     <app-country-input
-     (onEnter)="search($event)"    
-     (onDebounce)="suggestions($event)"
-     placeholder="Search Country..."
-     >
-
+      (onEnter)="search($event)"
+      (onDebounce)="suggestions($event)"
+      placeholder="Search Country..."
+    >
     </app-country-input>
   </div>
 </div>
+
+<ul 
+ *ngIf="showSuggestions"
+class="list-group">
+  <li
+    *ngFor="let countries of suggestedCountries"
+    class="list-group-item list-group-item-action"
+  >
+    <a class="nav-link" [routerLink]="['/country', countries.cca2]">
+      {{ countries.name.common }}
+    </a>
    
-<ul class="list-group">
-  <li 
-  *ngFor="let countries of suggestedCountries"
-  class="list-group-item list-group-item-action">
-   {{countries.name.common}}
-</li>
+  </li>
+
+  <li class="list-group-item list-group-item-action"
+   (click)="searchSuggestion(term)"
+  >
+    <a>
+      Buscar "{{term}}"
+    </a>
+  
+  </li>
 </ul>
- 
+
 <hr />
 
 <div class="alert alert-danger" *ngIf="Error">Not Found in the {{ term }}</div>
 
 <div *ngIf="countries.length > 0" class="row">
   <div class="col">
-     <app-country-table [countries]="countries"> </app-country-table>
+    <app-country-table [countries]="countries"> </app-country-table>
   </div>
 </div>
